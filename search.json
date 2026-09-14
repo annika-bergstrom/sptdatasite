@@ -1,0 +1,72 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "BMC SPT Data",
+    "section": "",
+    "text": "import {generateTabulatorTableFromCSV} from \"8bb63a6cde9addff\"\n\n\n\n\n\n\n\ngenerateTabulatorTableFromCSV(\n  \"#my-table\",                          // CSS selector for the table container\n  \"https://raw.githubusercontent.com/annika-bergstrom/csv-data-/refs/heads/main/SPT%20Production%20History%20-%20Sheet1.csv\",      // &lt;-- plug in your CSV URL or file path here\n\n  {\n    displayedColumns: [                 // columns to show (in order)\n      \"Year\",\n      \"Season\",\n      \"Show\",\n      \"Genre\",\n      \"Times_Performed\"\n    ],\n\n    numericColumns: [\"Year\", \"Times_Performed\"],       // columns to treat as numbers (enables range filters)\n\n    categoryColumns: [\"Season\", \"Genre\"],      // columns to treat as categories (enables dropdown filters)\n\n    sortColumns: [\"Year\"],          // default sort column(s)\n    sortOrders: [\"asc\"]                 // \"asc\" or \"desc\" for each sort column\n  }\n);"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This site contains a dataset based on the currently known production history of Bryn Mawr College’s Shakespeare Performance Troupe. It was built using Quarto, R, and the Post45 Data Viewer.\nThe data contained in this site was sourced from SPT’s public Wordpress, and has been compiled here, along with other data that has been collected from other sources, including SPT’s Youtube channel and previous blog."
+  },
+  {
+    "objectID": "datavis.html",
+    "href": "datavis.html",
+    "title": "Data Visualization",
+    "section": "",
+    "text": "Code\nlibrary(ggplot2)\nlibrary (dplyr)\n\nproddata &lt;- read.csv(\"https://raw.githubusercontent.com/annika-bergstrom/csv-data-/refs/heads/main/SPT%20Production%20History%20-%20Sheet1.csv\")\n\nnames(proddata)[names(proddata) == \"Times Performed\"] &lt;- \"Times_Performed\"\n\nyear_average &lt;- proddata %&gt;%\n  group_by(Year) %&gt;%\n  summarise(Average_Times_Performed = median(Times_Performed, na.rm = TRUE))\n\n# Barplot\nggplot(year_average, aes(x=Year, y=Average_Times_Performed)) + \n  geom_point(stat = \"identity\") + geom_smooth(method = \"lm\", formula = y ~ poly(x, 1), color = \"red\", se = TRUE)\n\n\n\n\n\n\n\n\nFigure 1: Year of show vs times performed."
+  },
+  {
+    "objectID": "datavis.html#year-of-show-vs-times-performed",
+    "href": "datavis.html#year-of-show-vs-times-performed",
+    "title": "Data Visualization",
+    "section": "",
+    "text": "Code\nlibrary(ggplot2)\nlibrary (dplyr)\n\nproddata &lt;- read.csv(\"https://raw.githubusercontent.com/annika-bergstrom/csv-data-/refs/heads/main/SPT%20Production%20History%20-%20Sheet1.csv\")\n\nnames(proddata)[names(proddata) == \"Times Performed\"] &lt;- \"Times_Performed\"\n\nyear_average &lt;- proddata %&gt;%\n  group_by(Year) %&gt;%\n  summarise(Average_Times_Performed = median(Times_Performed, na.rm = TRUE))\n\n# Barplot\nggplot(year_average, aes(x=Year, y=Average_Times_Performed)) + \n  geom_point(stat = \"identity\") + geom_smooth(method = \"lm\", formula = y ~ poly(x, 1), color = \"red\", se = TRUE)\n\n\n\n\n\n\n\n\nFigure 1: Year of show vs times performed."
+  },
+  {
+    "objectID": "datavis.html#genre-vs-show-season",
+    "href": "datavis.html#genre-vs-show-season",
+    "title": "Data Visualization",
+    "section": "Genre vs Show Season",
+    "text": "Genre vs Show Season\n\n\nCode\nlibrary(ggplot2)\nlibrary(dplyr)\n\n\nproddata &lt;- read.csv(\"https://raw.githubusercontent.com/annika-bergstrom/csv-data-/refs/heads/main/SPT%20Production%20History%20-%20Sheet1.csv\")\n\n# variable assignment \nnames(proddata)[names(proddata) == \"Times Performed\"] &lt;- \"Times_Performed\"\n\nnames(proddata)[names(proddata) == \"Fall \"] &lt;- \"Fall\"\n\nseason_counts &lt;- proddata %&gt;%\n  count(Season)\nseason_genre_counts &lt;- proddata %&gt;%\n  count(Season, Genre)\n\n# Barplot\nggplot(season_genre_counts, aes(fill=Genre, x=Season, y= n)) + \n  geom_bar(position = \"stack\", stat = \"identity\")\n\n\n\n\n\n\n\n\nFigure 3: Genre vs Show Season."
+  },
+  {
+    "objectID": "datavis.html#author-vs-genre",
+    "href": "datavis.html#author-vs-genre",
+    "title": "Data Visualization",
+    "section": "Author vs Genre",
+    "text": "Author vs Genre\n\n\nCode\nlibrary(ggplot2)\nlibrary(dplyr)\n\nproddata &lt;- read.csv(\"https://raw.githubusercontent.com/annika-bergstrom/csv-data-/refs/heads/main/SPT%20Production%20History%20-%20Sheet1.csv\")\n\nauthor_counts &lt;- proddata %&gt;%\n  count(Author)\ngenre_author_counts &lt;- proddata %&gt;%\n  count(Author, Genre)\n\nproddata_grouped &lt;- proddata %&gt;%\n  add_count(Author, name = \"author_total\") %&gt;%\n  mutate(\n    author_grouped = if_else(author_total == 1, \"Other\", Author)\n  )\n# Count by grouped author and genre\nplot_data &lt;- proddata_grouped %&gt;%\n  count(author_grouped, Genre)\n\n# Barplot\nggplot(plot_data, aes(fill=Genre, x=author_grouped, y= n)) + \n  geom_bar(position = \"stack\", stat = \"identity\")\n\n\n\n\n\n\n\n\nFigure 4: Author vs Genre."
+  },
+  {
+    "objectID": "datavis.html#shakepeare-shows-over-time",
+    "href": "datavis.html#shakepeare-shows-over-time",
+    "title": "Data Visualization",
+    "section": "Shakepeare Shows Over Time",
+    "text": "Shakepeare Shows Over Time\n\n\nCode\nlibrary(ggplot2)\nlibrary(dplyr)\n\nproddata &lt;- read.csv(\"https://raw.githubusercontent.com/annika-bergstrom/csv-data-/refs/heads/main/SPT%20Production%20History%20-%20Sheet1.csv\")\n\nShakespeare &lt;- proddata %&gt;%\n  filter(Author == \"William Shakespeare\")\n\n# count shakespeare productions by year\nplot_data &lt;- Shakespeare %&gt;%\n  count(Year)\n\n# Bar chart\nggplot(plot_data, aes(x= Year, y= n)) + \n  geom_bar(stat = \"identity\")\n\n\n\n\n\n\n\n\nFigure 5: Shakespeare vs Year."
+  },
+  {
+    "objectID": "datavis.html#genre-vs-times-performed",
+    "href": "datavis.html#genre-vs-times-performed",
+    "title": "Data Visualization",
+    "section": "Genre vs Times Performed",
+    "text": "Genre vs Times Performed\n\n\nCode\nlibrary(ggplot2)\nlibrary (dplyr)\nlibrary (ggiraph)\n\nproddata &lt;- read.csv(\"https://raw.githubusercontent.com/annika-bergstrom/csv-data-/refs/heads/main/SPT%20Production%20History%20-%20Sheet1.csv\")\n\nnames(proddata)[names(proddata) == \"Times Performed\"] &lt;- \"Times_Performed\"\n\ngenre_average &lt;- proddata %&gt;%\n  group_by(Genre) %&gt;%\n  summarise(Average_Times_Performed = mean(Times_Performed, na.rm = TRUE))\n\n# Barplot\nggplot(genre_average, aes(x=Genre, y=Average_Times_Performed)) + \n  geom_bar_interactive(hover_nearest = TRUE, aes(tooltip = paste(\"Genre:\", Genre, \"\\nAverage Times Performed:\", round(Average_Times_Performed, 2))), stat = \"identity\") \n\n\n\n\n\n\n\n\nFigure 2: Genre vs Times Performed."
+  },
+  {
+    "objectID": "datavis.html#cast-size-change-over-time",
+    "href": "datavis.html#cast-size-change-over-time",
+    "title": "Data Visualization",
+    "section": "Cast Size Change Over Time",
+    "text": "Cast Size Change Over Time\n\n\nCode\n# Library\nlibrary(ggplot2)\n\n# Create dummy data\nproddata &lt;- read.csv(\"https://raw.githubusercontent.com/annika-bergstrom/csv-data-/refs/heads/main/SPT%20Production%20History%20-%20Sheet1.csv\")\n\n# linear trend + confidence interval\nggplot(proddata, aes(x= Year, y= Cast_Size)) +\n  geom_point() + geom_smooth(method=lm , color=\"red\", fill=\"#69b3a2\", se=TRUE)\n\n\n\n\n\n\n\n\nFigure 6: Cast Size Change Over Time"
+  },
+  {
+    "objectID": "datavis.html#genre-vs-year",
+    "href": "datavis.html#genre-vs-year",
+    "title": "Data Visualization",
+    "section": "Genre vs Year",
+    "text": "Genre vs Year\n\n\nCode\nlibrary(ggplot2)\nlibrary (dplyr)\nlibrary (ggiraph)\nlibrary (geomtextpath)\n\nproddata &lt;- read.csv(\"https://raw.githubusercontent.com/annika-bergstrom/csv-data-/refs/heads/main/SPT%20Production%20History%20-%20Sheet1.csv\")\n\ngenre_counts &lt;- proddata %&gt;%\n  count(Genre)\nYear_genre_counts &lt;- proddata %&gt;%\n  count(Year, Genre)\n# Barplot\nggplot(Year_genre_counts, aes(x=Year, y= n, color=Genre, group=Genre)) + \n  geom_point(stat = \"identity\") + geom_labelsmooth(aes (label = Genre), fill = \"white\", method = \"lm\", formula = y ~ x)\n\n\n\n\n\n\n\n\nFigure 7: Genre vs Year"
+  }
+]
