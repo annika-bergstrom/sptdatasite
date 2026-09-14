@@ -3,9 +3,9 @@ project:
   output-dir: docs
 
 website:
-  title: "SPT Dataset"
+  title: "Quarto Sandbox"
   navbar:
-    background: #426d58
+    background: "#426d58"
     title: false
     search: true 
     left:
@@ -14,12 +14,16 @@ website:
       - href: datavis.qmd
         text: Data Visualization
       - about.qmd
+  
 
 format:
   html:
+    include-before-body: header.html
     theme:
       - lux
       - brand
-    max-width: 1200px
     css: styles.css
     toc: false
+
+
+
