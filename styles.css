@@ -1,1 +1,9 @@
 /* css styles */
+#quarto-document-content {
+    width:1000px;
+}
+
+.navbar-brand-container {
+    text-align:center;
+    
+}
