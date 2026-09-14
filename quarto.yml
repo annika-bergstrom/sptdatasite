@@ -3,8 +3,9 @@ project:
   output-dir: docs
 
 website:
-  title: false
+  title: "SPT Dataset"
   navbar:
+    title: false
     left:
       - href: index.qmd
         text: Home
