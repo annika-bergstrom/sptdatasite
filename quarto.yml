@@ -5,7 +5,9 @@ project:
 website:
   title: "SPT Dataset"
   navbar:
+    background: #426d58
     title: false
+    search: true 
     left:
       - href: index.qmd
         text: Home
