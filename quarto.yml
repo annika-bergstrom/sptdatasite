@@ -1,0 +1,22 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: 
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: datavis.qmd
+        text: Data Visualization
+      - about.qmd
+
+format:
+  html:
+    theme:
+      - lux
+      - brand
+    max-width: 1200px
+    css: styles.css
+    toc: false
